@@ -1,0 +1,347 @@
+{
+  "meta": {
+    "last_verified": "2026-10-10",
+    "currency": "INR",
+    "purpose": "Facts for the PMS vs MF vs SIF vs AIF comparison page. Educational only, not investment advice.",
+    "status_legend": {
+      "official": "Read directly on a SEBI or Income Tax Department page.",
+      "official_reported": "An official SEBI document exists (page confirmed), but the figure was taken from a news report quoting it.",
+      "legal_database": "Text of an Act reproduced by a tax-law database, not the government site.",
+      "secondary": "News, broker or advisory websites only. Verify before relying on it.",
+      "not_verified": "No source found. Do not present as fact."
+    },
+    "open_items": [
+      "PMS Regulations 2026 were approved by the SEBI Board on 24 Sep 2026; formal notification not confirmed.",
+      "Tax rates being unchanged for FY 2026-27 rests on secondary sources.",
+      "Mutual fund facts rest on secondary sources; SEBI's own text not read."
+    ]
+  },
+  "vehicles": {
+    "mutual_fund": {
+      "name": "Mutual fund",
+      "regulator": "SEBI",
+      "regulation": "SEBI (Mutual Funds) Regulations, 2026 (reported effective 1 April 2026)",
+      "facts": {
+        "min_investment": {
+          "label": "Minimum investment",
+          "value": "SIPs start from about Rs 500. The amount is set by fund houses, not by SEBI.",
+          "status": "secondary",
+          "sources": [
+            {
+              "url": "https://www.finowings.com/mutual-fund/benefits-of-investing-in-mutual-funds",
+              "supports": "SIP starting amount"
+            }
+          ],
+          "amount_inr": 500
+        },
+        "regulation_status": {
+          "label": "Rulebook",
+          "value": "The 2026 regulations replaced the 1996 regulations and took effect on 1 April 2026.",
+          "status": "secondary",
+          "sources": [
+            {
+              "url": "https://www.wrightresearch.in/blog/sebi-mutual-fund-regulations-2026/",
+              "supports": "Notification and effective date"
+            }
+          ]
+        },
+        "fees": {
+          "label": "Fees",
+          "value": "Expense ratio is capped by SEBI. Total expense ratio = base expense ratio + brokerage + statutory levies. Example base caps: 0.95% for equity-oriented schemes above Rs 50,000 crore, 0.90% for index funds and ETFs.",
+          "status": "secondary",
+          "sources": [
+            {
+              "url": "https://gulfnews.com/business/markets/indias-market-regulator-revises-mutual-fund-fees-top-6-things-investors-must-know-1.500383524",
+              "supports": "Base expense ratio structure and example caps"
+            }
+          ]
+        },
+        "tax": {
+          "label": "Tax",
+          "value": "Listed equity and equity-oriented funds: long-term gains (held over 12 months) are taxed at 12.5% above Rs 1.25 lakh a year; short-term gains at 20%.",
+          "status": "legal_database",
+          "sources": [
+            {
+              "url": "https://www.incometaxindia.gov.in/w/section-112a-59",
+              "supports": "Long-term capital gains rate of 12.5% for transfers on or after 23 July 2024"
+            },
+            {
+              "url": "https://www.taxmanagementindia.com/visitor/detail_act.asp?ID=43754",
+              "supports": "Finance (No. 2) Act 2024 text: Rs 1.25 lakh limit on long-term gains under section 112A"
+            },
+            {
+              "url": "https://www.taxmanagementindia.com/visitor/detail_act.asp?ID=43752",
+              "supports": "Finance (No. 2) Act 2024 text: short-term rate of 20% on or after 23 July 2024"
+            },
+            {
+              "url": "https://www.sahi.com/blogs/ltcg-tax-mutual-funds-stocks-budget-2026",
+              "supports": "Rates reported unchanged for FY 2026-27 (secondary)"
+            }
+          ],
+          "note": "Rates apply to transfers on or after 23 July 2024. Their continuation for FY 2026-27 is reported by secondary sources only."
+        },
+        "liquidity": {
+          "label": "Liquidity / exit load",
+          "value": "Not verified. Varies by manager or scheme; check the offer documents.",
+          "status": "not_verified",
+          "sources": [],
+          "note": "Exit loads differ by scheme."
+        },
+        "equity_oriented": {
+          "label": "What counts as equity-oriented",
+          "value": "A fund with 65% or more of its assets in domestic equity shares is treated as equity-oriented for these rates.",
+          "status": "secondary",
+          "sources": [
+            {
+              "url": "https://taxguru.in/?p=1057590",
+              "supports": "65% domestic equity test for equity-oriented funds"
+            }
+          ]
+        }
+      }
+    },
+    "sif": {
+      "name": "Specialised Investment Fund (SIF)",
+      "regulator": "SEBI (offered by mutual fund AMCs)",
+      "regulation": "SEBI circular dated 27 Feb 2025, effective 1 April 2025",
+      "facts": {
+        "min_investment": {
+          "label": "Minimum investment",
+          "value": "Rs 10 lakh across all SIF strategies, counted at PAN level. Accredited investors are exempt.",
+          "status": "official_reported",
+          "sources": [
+            {
+              "url": "https://www.sebi.gov.in/legal/circulars/feb-2025/regulatory-framework-for-specialized-investment-funds-sif-_92299.html",
+              "supports": "SEBI circular page, 27 Feb 2025"
+            },
+            {
+              "url": "https://www.sebi.gov.in/legal/circulars/jul-2025/monitoring-of-minimum-investment-threshold-under-specialized-investment-funds-sif-_95676.html",
+              "supports": "SEBI circular page on monitoring the threshold, 29 Jul 2025"
+            },
+            {
+              "url": "https://www.business-standard.com/amp/markets/news/sebi-clarifies-regulatory-framework-for-specialized-investment-funds-125040901078_1.html",
+              "supports": "PTI report quoting the PAN-level rule"
+            }
+          ],
+          "amount_inr": 1000000,
+          "note": "Accredited investors exempt."
+        },
+        "fees": {
+          "label": "Fees",
+          "value": "Not verified. Varies by manager or scheme; check the offer documents.",
+          "status": "not_verified",
+          "sources": [],
+          "note": "Not researched."
+        },
+        "tax": {
+          "label": "Tax",
+          "value": "Not verified separately for SIFs. Treatment depends on the strategy and how units are taxed; check before relying on it.",
+          "status": "not_verified",
+          "sources": []
+        }
+      }
+    },
+    "pms": {
+      "name": "Portfolio Management Services (PMS)",
+      "regulator": "SEBI",
+      "regulation": "SEBI (Portfolio Managers) Regulations, 2020 (in force as far as found). New 2026 regulations approved by the SEBI Board on 24 Sep 2026; notification not confirmed.",
+      "facts": {
+        "min_investment": {
+          "label": "Minimum investment per client",
+          "value": "Rs 50 lakh under the 2020 rules.",
+          "status": "secondary",
+          "sources": [
+            {
+              "url": "https://www.business-standard.com/amp/article/pti-stories/sebi-notifies-portfolio-managers-norms-doubles-investment-limit-to-rs-50-lakh-120012201077_1.html",
+              "supports": "PTI report of SEBI notification doubling the minimum to Rs 50 lakh"
+            }
+          ],
+          "amount_inr": 5000000
+        },
+        "structure": {
+          "label": "What it is",
+          "value": "A SEBI-registered portfolio manager runs a customised portfolio, typically for high-net-worth clients.",
+          "status": "secondary",
+          "sources": [
+            {
+              "url": "https://www.business-standard.com/amp/article/pti-stories/sebi-notifies-portfolio-managers-norms-doubles-investment-limit-to-rs-50-lakh-120012201077_1.html",
+              "supports": "Description of PMS clients"
+            }
+          ]
+        },
+        "regulation_status": {
+          "label": "Rule change pending",
+          "value": "SEBI's Board approved new Portfolio Managers Regulations, 2026 on 24 Sep 2026. A law-firm summary says most such decisions need formal Gazette notification before taking effect. No notification found.",
+          "status": "official",
+          "sources": [
+            {
+              "url": "https://www.sebi.gov.in/sebi_data/attachdocs/sep-2026/1790259036651.pdf",
+              "supports": "SEBI press release PR No. 59/2026"
+            },
+            {
+              "url": "https://www.corplawupdates.in/updates/sebi-board-meeting-september-2026-key-decisions",
+              "supports": "Law-firm summary on notification requirement (secondary)"
+            }
+          ]
+        },
+        "tax": {
+          "label": "Tax",
+          "value": "Listed equity and equity-oriented funds: long-term gains (held over 12 months) are taxed at 12.5% above Rs 1.25 lakh a year; short-term gains at 20%. Gains arise in the investor's hands trade by trade, so high-turnover strategies can produce short-term gains during the year.",
+          "status": "secondary",
+          "sources": [
+            {
+              "url": "https://www.incometaxindia.gov.in/w/section-112a-59",
+              "supports": "Long-term capital gains rate of 12.5% for transfers on or after 23 July 2024"
+            },
+            {
+              "url": "https://www.taxmanagementindia.com/visitor/detail_act.asp?ID=43754",
+              "supports": "Finance (No. 2) Act 2024 text: Rs 1.25 lakh limit on long-term gains under section 112A"
+            },
+            {
+              "url": "https://www.taxmanagementindia.com/visitor/detail_act.asp?ID=43752",
+              "supports": "Finance (No. 2) Act 2024 text: short-term rate of 20% on or after 23 July 2024"
+            },
+            {
+              "url": "https://www.mprofit.in/blog/2026/07/capital-gains-tax-ready-reckoner-fy-2025-26/",
+              "supports": "How PMS gains accumulate during the year"
+            }
+          ]
+        },
+        "fees": {
+          "label": "Fees",
+          "value": "Not verified. Varies by manager or scheme; check the offer documents.",
+          "status": "not_verified",
+          "sources": [],
+          "note": "No SEBI cap on regular PMS fees was found. Fee structures vary by manager."
+        }
+      }
+    },
+    "prim": {
+      "name": "PMS mutual-fund route (PRIM)",
+      "regulator": "SEBI",
+      "regulation": "Approved by the SEBI Board on 24 Sep 2026 as part of the Portfolio Managers Regulations, 2026. Not confirmed in force.",
+      "status": "approved_not_confirmed_in_force",
+      "facts": {
+        "min_investment": {
+          "label": "Minimum ticket size",
+          "value": "Rs 25 lakh.",
+          "status": "official",
+          "sources": [
+            {
+              "url": "https://www.sebi.gov.in/sebi_data/attachdocs/sep-2026/1790259036651.pdf",
+              "supports": "PR No. 59/2026, item 1.2.1.5"
+            }
+          ],
+          "amount_inr": 2500000,
+          "note": "Approved, not confirmed in force."
+        },
+        "fees": {
+          "label": "Fees",
+          "value": "Fixed management fee capped at 1% of client assets. Performance-based fee also permitted. Exit load waived.",
+          "status": "official",
+          "sources": [
+            {
+              "url": "https://www.sebi.gov.in/sebi_data/attachdocs/sep-2026/1790259036651.pdf",
+              "supports": "PR No. 59/2026, item 1.2.1.5.2"
+            }
+          ]
+        },
+        "structure": {
+          "label": "What it is",
+          "value": "Portfolio managers invest client money only in direct plans of mutual funds, including ETFs, index funds and SIFs.",
+          "status": "official",
+          "sources": [
+            {
+              "url": "https://www.sebi.gov.in/sebi_data/attachdocs/sep-2026/1790259036651.pdf",
+              "supports": "PR No. 59/2026"
+            }
+          ]
+        }
+      }
+    },
+    "aif": {
+      "name": "Alternative Investment Fund (AIF)",
+      "regulator": "SEBI",
+      "regulation": "SEBI (Alternative Investment Funds) Regulations, 2012 (amended up to 14 July 2026)",
+      "facts": {
+        "min_investment": {
+          "label": "Minimum investment per investor",
+          "value": "Rs 1 crore. Rs 25 lakh for employees or directors of the fund or its manager. Does not apply to accredited investors.",
+          "status": "official",
+          "sources": [
+            {
+              "url": "https://www.sebi.gov.in/sebi_data/attachdocs/jul-2026/1785301664601.pdf",
+              "supports": "Regulation 10(c)"
+            }
+          ],
+          "amount_inr": 10000000,
+          "note": "Accredited investors exempt. Each scheme needs a corpus of at least Rs 20 crore."
+        },
+        "categories": {
+          "label": "Categories",
+          "value": "Category I: start-ups, SMEs, infrastructure and similar. Category II: private equity and debt funds, no leverage beyond limits. Category III: complex or trading strategies that may use leverage.",
+          "status": "official",
+          "sources": [
+            {
+              "url": "https://www.sebi.gov.in/sebi_data/attachdocs/jul-2026/1785301664601.pdf",
+              "supports": "Regulation 3(4)"
+            }
+          ]
+        },
+        "lock_in": {
+          "label": "Tenure and liquidity",
+          "value": "Category I and II must be close-ended with a minimum tenure of three years. Category III can be open- or close-ended.",
+          "status": "official",
+          "sources": [
+            {
+              "url": "https://www.sebi.gov.in/sebi_data/attachdocs/jul-2026/1785301664601.pdf",
+              "supports": "Regulation 13"
+            }
+          ]
+        },
+        "large_value_fund": {
+          "label": "Large value fund for accredited investors",
+          "value": "Each investor must invest at least Rs 25 crore (previously Rs 70 crore, changed with effect from 19 Nov 2025).",
+          "status": "official",
+          "sources": [
+            {
+              "url": "https://www.sebi.gov.in/sebi_data/attachdocs/jul-2026/1785301664601.pdf",
+              "supports": "Regulation 2(1)(pa)"
+            }
+          ],
+          "amount_inr": 250000000
+        },
+        "accredited_investor": {
+          "label": "Accredited investor (individual, HUF, family trust, sole proprietorship)",
+          "value": "Annual income of at least Rs 2 crore; or net worth of at least Rs 7.5 crore with at least Rs 3.75 crore in financial assets; or income of at least Rs 1 crore with net worth of at least Rs 5 crore (Rs 2.5 crore in financial assets). Certificate from an accreditation agency needed.",
+          "status": "official",
+          "sources": [
+            {
+              "url": "https://www.sebi.gov.in/sebi_data/attachdocs/jul-2026/1785301664601.pdf",
+              "supports": "Regulation 2(1)(ab)"
+            }
+          ],
+          "note": "SEBI's Board approved a manager-led route and a Rs 5 crore securities-market-exposure test on 24 Sep 2026. Not confirmed in force."
+        },
+        "tax": {
+          "label": "Tax",
+          "value": "Category I and II AIFs generally get pass-through taxation. Category III AIFs are taxed at fund level.",
+          "status": "secondary",
+          "sources": [
+            {
+              "url": "https://www.businesstoday.in/amp/personal-finance/tax/story/capital-gain-tax-after-budget-2025-latest-ltcg-stcg-rates-on-various-assets-post-budget-2025-463274-2025-02-03",
+              "supports": "Pass-through vs fund-level taxation (Feb 2025 article)"
+            }
+          ]
+        },
+        "tax_cat3_effective": {
+          "label": "Effective tax on Category III AIFs",
+          "value": "Not verified. Varies by manager or scheme; check the offer documents.",
+          "status": "not_verified",
+          "sources": [],
+          "note": "Not researched."
+        }
+      }
+    }
+  }
+}
