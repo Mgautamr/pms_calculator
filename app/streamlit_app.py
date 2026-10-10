@@ -9,7 +9,9 @@ st.write(
 )
 st.markdown(
     "- **Fee Calculator** (in the sidebar): compare fixed, hybrid, hurdle and "
-    "high-water-mark fee structures on the same returns."
+    "high-water-mark fee structures on the same returns.\n"
+    "- **Compare Vehicles**: PMS vs mutual funds vs SIFs vs AIFs, with every fact "
+    "tagged by how well it was verified, plus a check of which you can access."
 )
 st.caption(
     "Educational illustration only. Not investment advice. "

@@ -32,7 +32,8 @@
               "supports": "SIP starting amount"
             }
           ],
-          "amount_inr": 500
+          "amount_inr": 500,
+          "accredited_exempt": false
         },
         "regulation_status": {
           "label": "Rulebook",
@@ -124,7 +125,8 @@
             }
           ],
           "amount_inr": 1000000,
-          "note": "Accredited investors exempt."
+          "note": "Accredited investors exempt.",
+          "accredited_exempt": true
         },
         "fees": {
           "label": "Fees",
@@ -156,7 +158,8 @@
               "supports": "PTI report of SEBI notification doubling the minimum to Rs 50 lakh"
             }
           ],
-          "amount_inr": 5000000
+          "amount_inr": 5000000,
+          "accredited_exempt": false
         },
         "structure": {
           "label": "What it is",
@@ -233,7 +236,8 @@
             }
           ],
           "amount_inr": 2500000,
-          "note": "Approved, not confirmed in force."
+          "note": "Approved, not confirmed in force.",
+          "accredited_exempt": false
         },
         "fees": {
           "label": "Fees",
@@ -275,7 +279,8 @@
             }
           ],
           "amount_inr": 10000000,
-          "note": "Accredited investors exempt. Each scheme needs a corpus of at least Rs 20 crore."
+          "note": "Accredited investors exempt. Each scheme needs a corpus of at least Rs 20 crore.",
+          "accredited_exempt": true
         },
         "categories": {
           "label": "Categories",
