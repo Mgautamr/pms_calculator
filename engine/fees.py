@@ -22,6 +22,8 @@ def simulate(initial, gross_returns, fixed_fee, perf_fee, hurdle,
     value = initial              # opening value of the current year
     high_water_mark = initial    # highest closing value so far
     closing_values = []
+    fixed_fees = []
+    perf_fees = []
     total_fixed = 0.0
     total_perf = 0.0
 
@@ -42,6 +44,8 @@ def simulate(initial, gross_returns, fixed_fee, perf_fee, hurdle,
         high_water_mark = max(high_water_mark, value)
 
         closing_values.append(value)
+        fixed_fees.append(fixed)
+        perf_fees.append(perf)
         total_fixed += fixed
         total_perf += perf
 
@@ -51,6 +55,9 @@ def simulate(initial, gross_returns, fixed_fee, perf_fee, hurdle,
 
     return {
         "closing_values": closing_values,
+        "fixed_fees": fixed_fees,
+        "perf_fees": perf_fees,
+        "exit_amount": exit_amount,
         "final_net_value": final_net_value,
         "total_fees": total_fees,
     }
