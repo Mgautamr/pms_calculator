@@ -79,6 +79,18 @@ def max_drawdown(values):
     return worst
 
 
+def drawdown_series(values):
+    """Fall from the running peak at every point, as negative fractions (0 at a new peak)."""
+    if not values:
+        raise ValueError("need at least one value")
+    peak = values[0]
+    out = []
+    for v in values:
+        peak = max(peak, v)
+        out.append(v / peak - 1)
+    return out
+
+
 def sharpe_ratio(annual_return, risk_free_rate, annual_volatility):
     """(annual return - risk-free rate) / annual volatility."""
     if annual_volatility == 0:

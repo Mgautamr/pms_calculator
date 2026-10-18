@@ -4,13 +4,16 @@ from pathlib import Path
 # Make the project root importable (so `engine` and `app` can be found).
 sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
+import altair as alt
 import pandas as pd
 import streamlit as st
 
+from app import theme
 from app.formatting import format_inr, format_pct
 from engine.fees import simulate
 
 st.set_page_config(page_title="PMS Fee Calculator", page_icon="₹", layout="wide")
+theme.apply()
 
 # ---------- presets (values are in percent) ----------
 PRESETS = {
@@ -97,16 +100,21 @@ net_cagr = cagr(result["final_net_value"])
 drag = None if net_cagr is None else gross_cagr - net_cagr
 
 # ---------- page ----------
-st.title("PMS Fee Calculator")
-st.caption("See what an investor keeps after fees, for the same gross returns.")
+theme.masthead("PMS fee calculator",
+               "See what an investor keeps after fees, for the same gross returns.")
 
-c1, c2, c3, c4 = st.columns(4)
-c1.metric("Final net value", format_inr(result["final_net_value"]),
-          delta=f"{format_inr(result['final_net_value'] - gross_final)} vs no fees")
-c2.metric("Total fees paid", format_inr(result["total_fees"]))
-c3.metric("Net CAGR", pct_or_na(net_cagr),
-          delta=None if drag is None else f"{-drag * 100:.2f} pts vs gross {pct_or_na(gross_cagr)}")
-c4.metric("Fee drag per year", "n/a" if drag is None else f"{drag * 100:.2f} pts")
+final = result["final_net_value"]
+gap = final - gross_final
+theme.stat_strip([
+    {"label": "Final net value", "value": format_inr(final),
+     "note": f"{format_inr(gap)} against no fees", "tone": "bad" if gap < 0 else "neutral"},
+    {"label": "Total fees paid", "value": format_inr(result["total_fees"]),
+     "note": f"Over {years} {'year' if years == 1 else 'years'}"},
+    {"label": "Net annual return (CAGR)", "value": pct_or_na(net_cagr),
+     "note": f"Gross {pct_or_na(gross_cagr)}"},
+    {"label": "Fee drag a year", "value": "n/a" if drag is None else f"{drag * 100:.2f} pts",
+     "note": "Gross CAGR minus net CAGR"},
+])
 
 tab_year, tab_compare, tab_rules = st.tabs(["Year by year", "Compare fee models", "Rules used"])
 
@@ -114,30 +122,38 @@ with tab_year:
     rows, opening = [], initial
     for i in range(years):
         closing = result["closing_values"][i]
-        rows.append({
-            "Year": i + 1,
-            "Gross return": format_pct(returns[i]),
-            "Opening value": format_inr(opening),
-            "Fixed fee": format_inr(result["fixed_fees"][i]),
-            "Performance fee": format_inr(result["perf_fees"][i]),
-            "Closing value": format_inr(closing),
-        })
+        rows.append([i + 1, format_pct(returns[i]), format_inr(opening),
+                     format_inr(result["fixed_fees"][i]), format_inr(result["perf_fees"][i]),
+                     format_inr(closing)])
         opening = closing
-    st.dataframe(pd.DataFrame(rows), hide_index=True)
+    theme.data_table(["Year", "Gross return", "Opening value", "Fixed fee", "Performance fee",
+                      "Closing value"], rows, numeric_cols=(1, 2, 3, 4, 5))
     if result["exit_amount"] > 0:
-        st.write(f"Exit load on final value: **{format_inr(result['exit_amount'])}**")
+        st.write(f"Exit load on the final value: **{format_inr(result['exit_amount'])}**")
 
-    chart = pd.DataFrame({"No fees": gross_path, "After fees": net_path},
-                         index=pd.Index(range(years + 1), name="Year"))
-    st.line_chart(chart)
-    st.caption("Chart shows portfolio value at each year end, before any exit load.")
+    theme.section("Value over time", "Portfolio value at each year end, before any exit load.")
+    long = pd.concat([
+        pd.DataFrame({"Year": range(years + 1), "Series": "No fees", "Value": gross_path}),
+        pd.DataFrame({"Year": range(years + 1), "Series": "After fees", "Value": net_path}),
+    ])
+    growth = alt.Chart(long).mark_line(strokeWidth=2.6).encode(
+        x=alt.X("Year:Q", axis=alt.Axis(tickMinStep=1, format="d"), title="Year"),
+        y=alt.Y("Value:Q", title="Portfolio value (₹)", scale=alt.Scale(zero=False),
+                axis=alt.Axis(format="~s")),
+        color=alt.Color("Series:N", scale=alt.Scale(domain=["No fees", "After fees"],
+                                                    range=[theme.SLATE, theme.INK]),
+                        legend=alt.Legend(orient="top", title=None)),
+        tooltip=["Year:Q", "Series:N", alt.Tooltip("Value:Q", format=",.0f")],
+    ).properties(height=320)
+    theme.show_chart(growth)
 
 with tab_compare:
-    st.write("Same gross returns, your fixed fee, profit share, hurdle and exit load. "
+    st.write("Same gross returns, and your fixed fee, profit share, hurdle and exit load. "
              "Only the fee structure changes.")
     if hurdle == 0:
-        st.info("Your hurdle is 0%, so several structures give similar answers. "
-                "Set a hurdle above 0% in the sidebar to see them separate.")
+        theme.notice("Your hurdle is 0%",
+                     text="Several structures give similar answers. Set a hurdle above 0% "
+                          "in the sidebar to see them separate.")
     models = [
         ("Fixed fee only", dict(perf_pct=0.0, hurdle_pct=0.0, catch_up_flag=False, hwm_flag=False)),
         ("Hybrid (fixed + profit share)", dict(perf_pct=perf, hurdle_pct=0.0, catch_up_flag=False, hwm_flag=False)),
@@ -146,20 +162,24 @@ with tab_compare:
         ("High-water mark", dict(perf_pct=perf, hurdle_pct=0.0, catch_up_flag=False, hwm_flag=True)),
         ("Hurdle + high-water mark", dict(perf_pct=perf, hurdle_pct=hurdle, catch_up_flag=False, hwm_flag=True)),
     ]
-    table, fees_paid = [], {}
+    table, fees_paid = [], []
     for name, params in models:
         res = run(fixed, exit_pct=exit_load, **params)
         n_cagr = cagr(res["final_net_value"])
-        table.append({
-            "Fee structure": name,
-            "Final net value": format_inr(res["final_net_value"]),
-            "Total fees": format_inr(res["total_fees"]),
-            "Net CAGR": pct_or_na(n_cagr),
-            "Fee drag": "n/a" if n_cagr is None else f"{(gross_cagr - n_cagr) * 100:.2f} pts",
-        })
-        fees_paid[name] = res["total_fees"]
-    st.dataframe(pd.DataFrame(table), hide_index=True)
-    st.bar_chart(pd.Series(fees_paid, name="Total fees (₹)"))
+        table.append([name, format_inr(res["final_net_value"]), format_inr(res["total_fees"]),
+                      pct_or_na(n_cagr),
+                      "n/a" if n_cagr is None else f"{(gross_cagr - n_cagr) * 100:.2f} pts"])
+        fees_paid.append({"Structure": name, "Fees": res["total_fees"]})
+    theme.data_table(["Fee structure", "Final net value", "Total fees", "Net CAGR", "Fee drag"],
+                     table, numeric_cols=(1, 2, 3, 4), min_width=640)
+
+    theme.section("Total fees by structure")
+    bars = alt.Chart(pd.DataFrame(fees_paid)).mark_bar(color=theme.SAFFRON).encode(
+        x=alt.X("Fees:Q", title="Total fees paid (₹)", axis=alt.Axis(format="~s")),
+        y=alt.Y("Structure:N", sort="-x", title=None, axis=alt.Axis(labelLimit=260)),
+        tooltip=["Structure:N", alt.Tooltip("Fees:Q", format=",.0f")],
+    ).properties(height=40 * len(models))
+    theme.show_chart(bars)
 
 with tab_rules:
     st.markdown(
@@ -175,6 +195,5 @@ with tab_rules:
 """
     )
 
-st.divider()
-st.caption("Educational illustration only. Not investment advice. Returns and fees are "
-           "assumptions you enter, not real fund data or any manager's actual terms.")
+theme.footnote("Educational illustration only, not investment advice. Returns and fees are "
+               "assumptions you enter, not real fund data or any manager's actual terms.")

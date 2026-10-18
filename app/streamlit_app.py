@@ -1,19 +1,27 @@
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+
 import streamlit as st
+import streamlit.components.v1 as components
 
-st.set_page_config(page_title="PMS Toolkit", page_icon="₹", layout="wide")
+from app import theme
 
-st.title("PMS Toolkit")
-st.write(
-    "Tools to understand Portfolio Management Services (PMS) in India: "
-    "see how different fee structures change what an investor actually keeps."
-)
-st.markdown(
-    "- **Fee Calculator** (in the sidebar): compare fixed, hybrid, hurdle and "
-    "high-water-mark fee structures on the same returns.\n"
-    "- **Compare Vehicles**: PMS vs mutual funds vs SIFs vs AIFs, with every fact "
-    "tagged by how well it was verified, plus a check of which you can access."
-)
-st.caption(
-    "Educational illustration only. Not investment advice. "
-    "All returns and fees are assumptions you enter, not real fund data."
-)
+st.set_page_config(page_title="Hurdle: a PMS toolkit", page_icon="₹", layout="wide")
+theme.apply()
+
+PAGES = {
+    "Fee_Calculator": "pages/1_Fee_Calculator.py",
+    "Compare_Vehicles": "pages/2_Compare_Vehicles.py",
+    "Portfolio_Dashboard": "pages/3_Portfolio_Dashboard.py",
+}
+
+# The landing page is a two-way component: clicking a tool sends its name back here.
+landing = components.declare_component("hurdle_landing", path=str(Path(__file__).parent / "landing_component"))
+choice = landing(key="landing", default=None)
+if isinstance(choice, dict) and choice.get("tool") in PAGES:
+    st.switch_page(PAGES[choice["tool"]])
+
+theme.footnote("Educational illustration only, not investment advice. All returns and fees are "
+               "assumptions you enter or sample data, not real fund data.")

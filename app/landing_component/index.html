@@ -1,0 +1,126 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Hurdle</title>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@300;400;500&family=Noto+Sans+Devanagari:wght@400&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#05070a;--bone:#dfe7e0;--dim:#aab4ad;--mut:#78837c;--line:rgba(223,231,224,.14)}
+*{box-sizing:border-box}html,body{margin:0;height:760px;background:var(--ink);color:var(--bone);font:300 16px/1.6 Onest,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+#app{position:relative;height:760px;overflow:hidden}
+canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.flat canvas{display:none}.flat #app{background:radial-gradient(11vw 11vw at 76% 24%,#e0231c,rgba(224,35,28,.3) 60%,transparent 72%),radial-gradient(120% 80% at 50% 0,rgba(120,150,158,.16),transparent 60%),#05070a}
+.vig{position:absolute;inset:0;pointer-events:none;background:radial-gradient(125% 95% at 50% 42%,transparent 40%,rgba(2,4,6,.6))}
+.grain{position:absolute;inset:0;pointer-events:none;opacity:.07;mix-blend-mode:overlay;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>")}
+header{position:absolute;left:clamp(18px,3.4vw,48px);top:22px;display:flex;align-items:baseline;gap:14px}
+header b{font-weight:500;letter-spacing:.3em;font-size:13px}header i{font-style:normal;font-size:11px;color:var(--mut);letter-spacing:.14em}
+.side{position:absolute;right:clamp(18px,3.4vw,48px);top:18px;writing-mode:vertical-rl;font:400 clamp(24px,2.8vw,44px) 'Noto Sans Devanagari',Onest,sans-serif;letter-spacing:.1em;color:rgba(223,231,224,.5)}
+main{position:absolute;left:clamp(18px,3.4vw,48px);bottom:clamp(40px,8vh,80px);max-width:min(560px,80vw);text-shadow:0 2px 28px rgba(3,6,8,.9)}
+main>*{transition:opacity .5s,transform .6s}main.sw>*{opacity:0;transform:translateY(10px)}
+.eye{font-size:10px;font-weight:500;letter-spacing:.22em;text-transform:uppercase;color:var(--dim);margin:0 0 14px}
+h1{font-weight:400;font-size:clamp(28px,4.6vw,60px);line-height:1.04;letter-spacing:-.012em;text-transform:uppercase;margin:0 0 16px}
+.d{margin:0;font-size:clamp(14px,1.2vw,17px);line-height:1.65;color:var(--dim);max-width:44ch}
+nav{position:absolute;right:clamp(18px,3.4vw,48px);top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:20px;align-items:flex-end;border-right:1px solid var(--line);padding-right:18px}
+nav button{all:unset;cursor:pointer;display:flex;flex-direction:row-reverse;gap:12px;align-items:baseline;color:var(--mut);transition:color .35s}
+nav button b{font-weight:300;font-size:clamp(20px,2.4vw,32px);letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+nav button span{font-size:10px;font-weight:500;letter-spacing:.2em;text-transform:uppercase}
+nav button:hover,nav button[aria-current=true]{color:var(--bone)}nav button[aria-current=true] b{color:#ff5a3c}
+nav button:focus-visible{outline:1px solid var(--bone);outline-offset:6px}
+.go{background:none;cursor:pointer;font-family:inherit;display:inline-flex;margin-top:22px;padding:13px 24px;border:1px solid var(--line);border-radius:100px;color:var(--bone);text-decoration:none;font-size:11px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;text-shadow:none;transition:background .4s,color .4s,border-color .4s}.go:hover{background:var(--bone);color:var(--ink);border-color:var(--bone)}.go:focus-visible{outline:1px solid var(--bone);outline-offset:4px}
+#pre{position:absolute;inset:0;background:var(--ink);display:grid;place-items:center;z-index:5;animation:out .9s .5s forwards}
+#pre i{display:block;width:120px;height:1px;background:var(--line);overflow:hidden}#pre i:after{content:'';display:block;height:100%;background:var(--bone);animation:ld .6s linear forwards}
+@keyframes out{to{opacity:0;visibility:hidden}}@keyframes ld{from{width:0}to{width:100%}}
+@media(max-width:640px){nav button span{display:none}.side{display:none}}
+@media(prefers-reduced-motion:reduce){#pre{display:none}main>*{transition:none}}
+</style></head><body>
+<div id="app"><canvas id="gl" aria-hidden="true"></canvas><div class="vig"></div><div class="grain"></div>
+<header><b>HURDLE</b><i>A PMS toolkit</i></header><div class="side" aria-hidden="true">हिसाब</div>
+<main aria-live="polite"><p class="eye"></p><h1></h1><p class="d"></p><button class="go" type="button"></button></main>
+<nav aria-label="Tools"><button><b>01</b><span>Fee calculator</span></button><button><b>02</b><span>Compare vehicles</span></button><button><b>03</b><span>Portfolio dashboard</span></button></nav>
+<div id="pre"><i></i></div></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(function(){
+var TL=[
+{h:'What you keep.',d:'Each column is a year of growth. Pale is what an investor keeps, red is what fees take.',cta:'Open the fee calculator',path:'Fee_Calculator',gy:0},
+{h:'Four ways in.',d:'Where each door opens, by minimum investment on a log scale: mutual fund, SIF, PMS and AIF.',cta:'Compare the vehicles',path:'Compare_Vehicles',gy:-40},
+{h:'How rough was the ride?',d:'A portfolio against its benchmark. The red is every stretch spent below an earlier peak.',cta:'Open the dashboard',path:'Portfolio_Dashboard',gy:-80}];
+var $=function(q){return document.querySelector(q)},app=$('#app'),main=$('main'),eye=$('.eye'),hh=$('h1'),dd=$('.d'),go=$('.go');
+var btns=[].slice.call(document.querySelectorAll('nav button')),cur=0,gp,gt,grow=[0,0,0];
+var REDUCE=matchMedia('(prefers-reduced-motion: reduce)').matches;if(REDUCE)grow=[1,1,1];
+function show(n,instant){
+  cur=Math.max(0,Math.min(2,n));var c=TL[cur];
+  var apply=function(){eye.textContent='Tool '+(cur+1)+' of 3';hh.textContent=c.h;dd.textContent=c.d;go.textContent=c.cta;main.classList.remove('sw')};
+  btns.forEach(function(b,i){b.setAttribute('aria-current',i===cur)});
+  if(gp){gp.set(-16,c.gy+13,26);gt.set(0,c.gy+5,0)}
+  if(!instant&&!REDUCE)grow[cur]=0;
+  if(instant||REDUCE){apply();return}
+  main.classList.add('sw');setTimeout(apply,380);
+}
+btns.forEach(function(b,i){b.addEventListener('click',function(){show(i)})});
+addEventListener('keydown',function(e){if(e.key==='ArrowDown'||e.key==='PageDown')show(cur+1);if(e.key==='ArrowUp'||e.key==='PageUp')show(cur-1)});
+/* scroll moves between tools; at either end the page itself keeps scrolling */
+var lock=0;app.addEventListener('wheel',function(e){if(Math.abs(e.deltaY)<8)return;var n=cur+(e.deltaY>0?1:-1);if(n<0||n>2)return;e.preventDefault();if(Date.now()<lock)return;lock=Date.now()+900;show(n)},{passive:false});
+/* the Streamlit component protocol: tell the app which tool was chosen, so it can switch page in the same tab */
+function send(type,x){var m={isStreamlitMessage:true,type:type};for(var k in x)m[k]=x[k];parent.postMessage(m,'*')}
+send('streamlit:componentReady',{apiVersion:1});send('streamlit:setFrameHeight',{height:760});
+go.addEventListener('click',function(){send('streamlit:setComponentValue',{value:{tool:TL[cur].path,n:Date.now()},dataType:'json'})});
+var cl=function(x){return Math.max(0,Math.min(1,x))},ez=function(x){return 1-Math.pow(1-cl(x),3)};
+
+try{
+if(typeof THREE==='undefined')throw 0;
+var R=new THREE.WebGLRenderer({canvas:$('#gl'),antialias:true});
+var S=new THREE.Scene();S.background=new THREE.Color(0x05070a);S.fog=new THREE.FogExp2(0x05070a,.012);
+var cam=new THREE.PerspectiveCamera(46,1,.5,400);
+var P=new THREE.Vector3(-16,13,26),Tg=new THREE.Vector3(0,5,0);gp=P.clone();gt=Tg.clone();
+S.add(new THREE.AmbientLight(0xaab4ad,.5));var dl=new THREE.DirectionalLight(0xdfe7e0,.95);dl.position.set(-20,40,30);S.add(dl);
+var s=7,rg=function(){return(s=(s*1664525+1013904223)>>>0)/4294967296};
+var bone=new THREE.MeshLambertMaterial({color:0xdfe7e0}),red=new THREE.MeshLambertMaterial({color:0xe0231c,emissive:0x3a0705}),box=new THREE.BoxGeometry(1,1,1);
+function grp(y){var g=new THREE.Group();g.position.y=y;g.add(new THREE.GridHelper(160,40,0x2a3238,0x141a1e));S.add(g);return g}
+
+/* 1 · fee calculator: twelve years, what you keep (pale) and what fees take (red) */
+var ga=grp(0),bars=[],NY=12;
+for(var i=0;i<NY;i++){var Gv=100*Math.pow(1.12,i+1),Nv=100*Math.pow(1.095,i+1),kb=new THREE.Mesh(box,bone),kr=new THREE.Mesh(box,red);
+  kb.position.x=kr.position.x=(i-(NY-1)/2)*3.1;ga.add(kb,kr);bars.push({kb:kb,kr:kr,n:Nv*.04,f:(Gv-Nv)*.04})}
+function updA(g){bars.forEach(function(b,j){var e=ez(g*1.7-j*.08),nh=Math.max(b.n*e,.01),fh=Math.max(b.f*e,.01);
+  b.kb.scale.set(2,nh,2);b.kb.position.y=nh/2;b.kr.scale.set(2,fh,2);b.kr.position.y=nh+fh/2})}
+
+/* 2 · compare vehicles: minimum ticket on a log scale, a staircase of doors */
+function label(a,b){var c=document.createElement('canvas');c.width=512;c.height=160;var x=c.getContext('2d');x.textAlign='center';
+  x.fillStyle='#dfe7e0';x.font='500 52px Onest,system-ui,sans-serif';x.fillText(a,256,64);x.fillStyle='#ff5a3c';x.font='400 46px Onest,system-ui,sans-serif';x.fillText(b,256,126);
+  var sp=new THREE.Sprite(new THREE.SpriteMaterial({map:new THREE.CanvasTexture(c),transparent:true,fog:false}));sp.scale.set(10,3.1,1);return sp}
+var gb=grp(-40),steps=[['Mutual fund','from ₹500',2.7],['SIF','₹10 lakh',6],['PMS','₹50 lakh',6.7],['AIF','₹1 crore',7]].map(function(t,i){
+  var m=new THREE.Mesh(box,bone),lb=label(t[0],t[1]);m.position.x=lb.position.x=(i-1.5)*9;gb.add(m,lb);return{m:m,lb:lb,h:(t[2]-2)*2.2}});
+function updB(g){steps.forEach(function(o,j){var e=ez(g*1.5-j*.2),h=Math.max(o.h*e,.01);o.m.scale.set(6,h,6);o.m.position.y=h/2;o.lb.position.y=h+2.4;o.lb.visible=e>.05})}
+
+/* 3 · portfolio dashboard: value paths, with every stretch below an earlier peak in red */
+var gc=grp(-80),NP=72,xs=[],pv=[],bv=[],a=1,b=1,mx=0;
+for(var i=0;i<NP;i++){xs.push(-26+52*i/(NP-1));a*=1+.012+.05*(rg()+rg()+rg()-1.5);b*=1+.009+.036*(rg()+rg()+rg()-1.5);pv.push(a);bv.push(b);mx=Math.max(mx,a,b)}
+var sc=14/mx,py=pv.map(function(v){return v*sc}),by=bv.map(function(v){return v*sc}),pk=[],q=0;py.forEach(function(v){q=Math.max(q,v);pk.push(q)});
+function ribbon(top,bot,color,op,z){var pos=new Float32Array(NP*6),ix=[];for(var i=0;i<NP;i++){pos.set([xs[i],top[i],z,xs[i],bot[i],z],i*6);if(i<NP-1)ix.push(2*i,2*i+1,2*i+2,2*i+1,2*i+3,2*i+2)}
+  var g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.BufferAttribute(pos,3));g.setIndex(ix);
+  var m=new THREE.Mesh(g,new THREE.MeshBasicMaterial({color:color,transparent:true,opacity:op,side:THREE.DoubleSide,depthWrite:false}));gc.add(m);return m}
+function path(ys,color,z){var g=new THREE.BufferGeometry().setFromPoints(ys.map(function(y,i){return new THREE.Vector3(xs[i],y,z)})),l=new THREE.Line(g,new THREE.LineBasicMaterial({color:color}));gc.add(l);return l}
+var fill=ribbon(py,py.map(function(){return 0}),0xdfe7e0,.07,-.02),dd2=ribbon(pk,py,0xe0231c,.55,-.01),lb=path(by,0x78837c,.01),lp=path(py,0xdfe7e0,.02);
+function updC(g){var e=ez(g);lp.geometry.setDrawRange(0,Math.max(2,Math.floor(NP*e)));lb.geometry.setDrawRange(0,Math.max(2,Math.floor(NP*e)));
+  fill.geometry.setDrawRange(0,Math.floor((NP-1)*e)*6);dd2.geometry.setDrawRange(0,Math.floor((NP-1)*e)*6)}
+var upd=[updA,updB,updC];
+
+/* the hurdle: a red disc in the sky */
+function glow(c1,c2){var c=document.createElement('canvas');c.width=c.height=128;var x=c.getContext('2d'),g=x.createRadialGradient(64,64,0,64,64,64);g.addColorStop(0,c1);g.addColorStop(.4,c2);g.addColorStop(1,'rgba(0,0,0,0)');x.fillStyle=g;x.fillRect(0,0,128,128);return new THREE.CanvasTexture(c)}
+var disc=new THREE.Mesh(new THREE.CircleGeometry(10,64),new THREE.MeshBasicMaterial({color:0xe0231c,fog:false})),
+ halo=new THREE.Mesh(new THREE.PlaneGeometry(70,70),new THREE.MeshBasicMaterial({map:glow('rgba(255,110,90,.9)','rgba(210,40,32,.26)'),transparent:true,opacity:.5,blending:THREE.AdditiveBlending,depthWrite:false,fog:false}));
+S.add(disc,halo);
+
+var mx2=0,my2=0;app.addEventListener('pointermove',function(e){var r=app.getBoundingClientRect();mx2=(e.clientX-r.left)/r.width*2-1;my2=-((e.clientY-r.top)/r.height*2-1)},{passive:true});
+function rs(){var w=app.clientWidth,h=app.clientHeight;R.setPixelRatio(Math.min(devicePixelRatio||1,1.8));R.setSize(w,h,false);cam.aspect=w/h;cam.fov=w/h<1?62:46;cam.updateProjectionMatrix()}
+new ResizeObserver(rs).observe(app);rs();
+var last=performance.now(),t=0;
+(function loop(now){var dt=Math.min((now-last)/1000,.05);last=now;t+=dt;
+  var k=REDUCE?1:1-Math.exp(-2.4*dt);P.lerp(gp,k);Tg.lerp(gt,k);
+  cam.position.set(P.x+mx2*1.6,P.y+my2*.8,P.z);cam.lookAt(Tg);
+  if(grow[cur]<1)grow[cur]=Math.min(1,grow[cur]+dt*.5);
+  for(var j=0;j<3;j++)upd[j](grow[j]);
+  disc.position.set(cam.position.x+34,cam.position.y+17,-125);halo.position.set(cam.position.x+34,cam.position.y+17,-126);if(!REDUCE)halo.material.opacity=.5+Math.sin(t*.35)*.05;
+  R.render(S,cam);requestAnimationFrame(loop)})(last);
+}catch(err){document.documentElement.classList.add('flat')}
+show(0,true);
+})();
+</script></body></html>

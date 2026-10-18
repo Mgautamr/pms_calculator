@@ -113,3 +113,12 @@ def test_cagr_rejects_bad_input():
         cagr(0, 100, 365)
     with pytest.raises(ValueError):
         cagr(100, 120, 0)
+
+
+def test_drawdown_series_matches_max_drawdown_and_reports_each_point():
+    from engine.analytics import drawdown_series
+    series = drawdown_series(VALUES)
+    assert len(series) == len(VALUES)
+    assert series[0] == 0
+    assert min(series) == pytest.approx(EXPECTED["max_drawdown"], abs=1e-9)
+    assert drawdown_series([100, 150, 90, 120]) == pytest.approx([0, 0, -0.4, -0.2])
